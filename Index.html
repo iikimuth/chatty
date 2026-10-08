@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatty | AI Business Assistant</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:#fff;color:#172033;line-height:1.6}
+.container{width:min(1100px,92%);margin:auto}
+.hero{padding:80px 0 70px;text-align:center;background:linear-gradient(135deg,#f8fafc,#eef4ff)}
+.badge{display:inline-block;padding:8px 16px;border-radius:30px;background:#e9f8ee;color:#16803c;font-size:14px;font-weight:700;margin-bottom:24px}
+.avatar{width:82px;height:82px;margin:0 auto 20px;border-radius:24px;background:#172033;color:white;display:grid;place-items:center;font-size:40px;box-shadow:0 12px 30px #17203322}
+h1{font-size:clamp(42px,7vw,72px);letter-spacing:-3px;margin-bottom:14px}
+.hero p{max-width:700px;margin:auto;font-size:19px;color:#526078}
+.section{padding:70px 0}
+.section-title{text-align:center;font-size:34px;margin-bottom:40px;letter-spacing:-1px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{padding:30px;border:1px solid #e4e8ef;border-radius:20px;background:white;box-shadow:0 10px 30px #1720330a}
+.card h3{font-size:22px;margin-bottom:18px}
+.chaos{border-top:5px solid #e96b6b}
+.solution{border-top:5px solid #4f83e8}
+ul{padding-left:20px;color:#5a6578}
+li{margin:10px 0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature{padding:28px;border-radius:20px;background:#f7f9fc;border:1px solid #e8ebf1}
+.icon{font-size:30px;margin-bottom:14px}
+.feature h3{margin-bottom:8px}
+.simulation{background:#f6f8fc}
+.chatbox{max-width:760px;margin:auto;background:#fff;border:1px solid #e2e7ef;border-radius:24px;padding:26px;box-shadow:0 15px 40px #17203312}
+.scenarios{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+button{border:0;border-radius:12px;padding:12px 16px;background:#172033;color:white;cursor:pointer;font-weight:700}
+button:hover{transform:translateY(-1px);opacity:.9}
+.chat{min-height:220px;padding:18px;background:#f7f9fc;border-radius:16px}
+.message{max-width:82%;padding:12px 15px;border-radius:15px;margin:10px 0}
+.user{margin-left:auto;background:#172033;color:white;border-bottom-right-radius:4px}
+.agent{background:#e9effa;border-bottom-left-radius:4px}
+.typing{font-size:13px;color:#68758a;font-style:italic;display:none;margin:8px}
+.cta{text-align:center;padding:75px 0;background:#172033;color:white}
+.cta p{color:#cbd3e2;margin:10px auto 25px;max-width:600px}
+.cta a{display:inline-block;background:white;color:#172033;text-decoration:none;padding:14px 24px;border-radius:12px;font-weight:800}
+footer{text-align:center;padding:22px;font-size:13px;color:#7b8495}
+@media(max-width:700px){
+.compare,.features{grid-template-columns:1fr}
+.hero{padding:60px 0}
+.section{padding:55px 0}
+h1{letter-spacing:-2px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+<div class="container">
+<div class="avatar">✦</div>
+<div class="badge">🟢 Status: Active & Ready 24/7</div>
+<h1>Meet Chatty</h1>
+<p>Your AI Business Assistant for turning a Business Planner idea into a structured digital product, while building the strategy and content to share the journey.</p>
+</div>
+</header>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">From Overwhelmed to Organized</h2>
+<div class="compare">
+<div class="card chaos">
+<h3>🌪️ The Chaos</h3>
+<ul>
+<li>Unclear high-level structure for the retiree planner.</li>
+<li>Daily work can feel overwhelming without gentle time boundaries.</li>
+<li>Social media direction needs to evolve with the new business journey.</li>
+</ul>
+</div>
+<div class="card solution">
+<h3>✨ The Solution</h3>
+<ul>
+<li>Chatty structures the planner before individual pages are drafted.</li>
+<li>Creates a gentle 3-hour daily workflow with room for schedule slippage.</li>
+<li>Develops a social media strategy and weekly content around the building journey.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">Chatty's Core Capabilities</h2>
+<div class="features">
+<div class="feature">
+<div class="icon">🧩</div>
+<h3>Product Architect</h3>
+<p>Shapes the Business Planner concept, framework, structure, daily steps and page layout before production begins.</p>
+</div>
+<div class="feature">
+<div class="icon">🗓️</div>
+<h3>Gentle Productivity</h3>
+<p>Builds a realistic 3-hour daily system and weekly strategy review that allows life and schedule changes.</p>
+</div>
+<div class="feature">
+<div class="icon">📣</div>
+<h3>Content Strategist</h3>
+<p>Turns the product-building journey into a consistent social media strategy and weekly content plan, supported by Canva.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section simulation" id="simulation">
+<div class="container">
+<h2 class="section-title">Try Chatty</h2>
+<div class="chatbox">
+<div class="scenarios">
+<button onclick="runChat(0)">Plan the Product</button>
+<button onclick="runChat(1)">Plan My Day</button>
+<button onclick="runChat(2)">Create Social Content</button>
+</div>
+<div class="chat" id="chat">
+<div class="agent message">Hi! I'm Chatty. Choose a scenario above and let's turn your idea into an actionable next step.</div>
+</div>
+<div class="typing" id="typing">Chatty is thinking...</div>
+</div>
+</div>
+</section>
+
+<section class="cta">
+<div class="container">
+<h2>Ready to Build Your Business Idea?</h2>
+<p>See how Chatty can turn a big idea into a structured, gentle and consistent business-building process.</p>
+<a href="#simulation">See Chatty in Action →</a>
+</div>
+</section>
+
+<footer>Built with AI · AI Builder Bootcamp Showcase</footer>
+
+<script>
+const chats=[
+["I want to create a Business Planner for retirees. Where should I start?","Let's begin with the big picture. I'll map the purpose, target user, core framework, sections and daily journey first. Once the structure is clear, we can draft individual pages and refine the layout."],
+["I only have 3 hours today. What should I work on?","Let's keep it gentle. I'll choose one meaningful priority, break it into small steps, and leave buffer time so a slower day doesn't feel like a failed day."],
+["How can I tell the story of building this planner on Instagram?","I'll turn the journey into a weekly content theme: what you're building, why it matters, what you're learning and useful tips for your audience. We can then develop the individual posts and Canva-ready content."]
+];
+function runChat(i){
+const box=document.getElementById("chat"),typing=document.getElementById("typing");
+box.innerHTML='<div class="user message">'+chats[i][0]+'</div>';
+typing.style.display="block";
+setTimeout(()=>{
+typing.style.display="none";
+box.innerHTML+='<div class="agent message">'+chats[i][1]+'</div>';
+},900);
+}
+</script>
+</body>
+</html>
