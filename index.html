@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatty | AI Business Assistant</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:#fff;color:#172033;line-height:1.6}
+.container{width:min(1100px,92%);margin:auto}
+.hero{padding:70px 0;text-align:center;background:linear-gradient(135deg,#f8fafc,#eef4ff)}
+.badge{display:inline-block;padding:8px 16px;border-radius:30px;background:#e9f8ee;color:#16803c;font-size:14px;font-weight:700;margin:20px 0}
+.avatar{width:82px;height:82px;margin:auto;border-radius:24px;background:#172033;color:white;display:grid;place-items:center;font-size:40px}
+h1{font-size:clamp(42px,7vw,72px);letter-spacing:-3px}
+.hero p{max-width:700px;margin:14px auto;font-size:19px;color:#526078}
+.section{padding:65px 0}
+.section-title{text-align:center;font-size:32px;margin-bottom:35px}
+.compare,.features{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.card{padding:27px;border:1px solid #e4e8ef;border-radius:18px;box-shadow:0 10px 30px #1720330a}
+.card h3{font-size:21px;margin-bottom:15px}
+.chaos{border-top:5px solid #e96b6b}
+.solution{border-top:5px solid #4f83e8}
+ul{padding-left:20px;color:#5a6578}
+li{margin:10px 0}
+.features{grid-template-columns:repeat(3,1fr)}
+.feature{padding:25px;border-radius:18px;background:#f7f9fc;border:1px solid #e8ebf1}
+.feature h3{margin:8px 0}
+.icon{font-size:30px}
+.simulation{background:#f6f8fc}
+.chatbox{max-width:760px;margin:auto;background:white;border:1px solid #e2e7ef;border-radius:22px;padding:24px}
+.scenarios{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+button{border:0;border-radius:11px;padding:12px 15px;background:#172033;color:white;cursor:pointer;font-weight:700}
+button:hover{opacity:.85}
+.chat{min-height:170px;padding:15px;background:#f7f9fc;border-radius:14px}
+.message{max-width:85%;padding:12px 15px;border-radius:14px;margin:10px 0;white-space:pre-wrap}
+.user{margin-left:auto;background:#172033;color:white}
+.agent{background:#e9effa}
+.typing{display:none;color:#68758a;font-size:13px;margin:8px}
+
+/* ====== PLACES SECTION & TABLE STYLING ====== */
+.places-section{background:#fcfdfd}
+.table-card{background:white;border:1px solid #e4e8ef;border-radius:22px;box-shadow:0 10px 30px #1720330a;overflow:hidden}
+.table-header-bar{padding:20px 24px;border-bottom:1px solid #eef2f6;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;background:#fafbfc}
+.table-meta{display:flex;align-items:center;gap:12px}
+.live-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:#e9f8ee;color:#16803c;font-size:13px;font-weight:700}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#16803c;display:inline-block;box-shadow:0 0 0 2px #bbf0cb}
+.count-pill{color:#657087;font-size:13px;font-weight:600}
+.search-box{position:relative}
+.search-input{padding:10px 16px;border:1px solid #e2e7ef;border-radius:11px;font-size:14px;background:#fff;color:#172033;width:260px;transition:all .2s;outline:none;font-family:inherit}
+.search-input:focus{border-color:#4f83e8;box-shadow:0 0 0 3px #4f83e81a}
+.places-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.places-wrap::-webkit-scrollbar{height:8px}
+.places-wrap::-webkit-scrollbar-track{background:#f1f4f8}
+.places-wrap::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+#places{width:100%;border-collapse:collapse;font-size:14px;text-align:left;white-space:nowrap}
+#places th{background:#f8fafc;color:#526078;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:15px 20px;border-bottom:1px solid #e4e8ef}
+#places td{padding:16px 20px;border-bottom:1px solid #f1f4f8;vertical-align:middle;color:#334155}
+#places tbody tr{transition:background .15s ease}
+#places tbody tr:hover{background:#f8faff}
+#places tbody tr:last-child td{border-bottom:none}
+
+/* Cell Elements */
+.place-info{display:flex;flex-direction:column;gap:3px}
+.place-name{font-weight:700;color:#172033;font-size:15px}
+.place-address{font-size:12px;color:#7b8495;max-width:280px;white-space:normal;line-height:1.4}
+.category-pill{display:inline-block;padding:5px 12px;border-radius:20px;background:#eef4ff;color:#315fc4;font-size:12px;font-weight:700}
+.rating-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;background:#fff8eb;color:#b45309;font-weight:700;font-size:13px;border:1px solid #fef3c7}
+.star{color:#f59e0b}
+.reviews-pill{color:#526078;font-size:13px;font-weight:500}
+.city-text{display:inline-flex;align-items:center;gap:5px;color:#475569;font-weight:500}
+.phone-link{color:#172033;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:5px;transition:color .2s}
+.phone-link:hover{color:#315fc4;text-decoration:underline}
+.btn-map{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;background:#172033;color:white;text-decoration:none;font-size:12px;font-weight:700;transition:all .2s}
+.btn-map:hover{opacity:.85;transform:translateY(-1px)}
+.empty-cell{text-align:center;padding:45px 20px!important;color:#657087;font-size:14px}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid #e2e8f0;border-top-color:#172033;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.table-footer-bar{padding:14px 24px;border-top:1px solid #eef2f6;background:#fafbfc;color:#7b8495;font-size:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+/* ============================================= */
+
+.cta{text-align:center;padding:65px 0;background:#172033;color:white}
+.cta p{color:#cbd3e2;margin:12px auto 24px;max-width:600px}
+.cta a{display:inline-block;background:white;color:#172033;text-decoration:none;padding:13px 22px;border-radius:11px;font-weight:800}
+footer{text-align:center;padding:22px;font-size:13px;color:#7b8495}
+
+@media(max-width:700px){
+.compare,.features{grid-template-columns:1fr}
+.hero{padding:55px 0}
+.section{padding:48px 0}
+h1{letter-spacing:-2px}
+.chatbox{padding:15px}
+.table-header-bar{flex-direction:column;align-items:stretch}
+.search-input{width:100%}
+.table-footer-bar{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+<div class="container">
+<div class="avatar">✦</div>
+<div class="badge">🟢 Status: Active & Ready 24/7</div>
+<h1>Meet Chatty</h1>
+<p>Your AI Business Assistant for turning a Business Planner idea into a structured digital product, while building the strategy and content to share the journey.</p>
+</div>
+</header>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">From Overwhelmed to Organized</h2>
+<div class="compare">
+<div class="card chaos">
+<h3>🌪️ The Chaos</h3>
+<ul>
+<li>Unclear structure for the retiree planner.</li>
+<li>Daily work feels overwhelming without flexible time boundaries.</li>
+<li>Social media direction needs to evolve with the business journey.</li>
+</ul>
+</div>
+<div class="card solution">
+<h3>✨ The Solution</h3>
+<ul>
+<li>Structure the planner before drafting individual pages.</li>
+<li>Create a gentle 3-hour workflow with buffer time.</li>
+<li>Build a social media strategy and weekly content plan.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<h2 class="section-title">Chatty's Core Capabilities</h2>
+<div class="features">
+<div class="feature"><div class="icon">🧩</div><h3>Product Architect</h3><p>Develops the planner concept, framework, sections, daily steps and page layout.</p></div>
+<div class="feature"><div class="icon">🗓️</div><h3>Gentle Productivity</h3><p>Plans realistic work blocks and a weekly strategy review with room for schedule changes.</p></div>
+<div class="feature"><div class="icon">📣</div><h3>Content Strategist</h3><p>Turns your product-building journey into social media strategy and weekly content supported by Canva.</p></div>
+</div>
+</div>
+</section>
+
+<section class="section simulation" id="simulation">
+<div class="container">
+<h2 class="section-title">Try Chatty</h2>
+<div class="chatbox">
+<div class="scenarios">
+<button onclick="runChat(0)">Plan the Product</button>
+<button onclick="runChat(1)">Plan My Day</button>
+<button onclick="runChat(2)">Create Social Content</button>
+</div>
+<div class="chat" id="chat" aria-live="polite">
+<div class="message agent">Hi! I'm Chatty. Choose a scenario and let's turn your idea into an actionable next step.</div>
+</div>
+<div class="typing" id="typing">Chatty is thinking...</div>
+</div>
+</div>
+</section>
+
+<section class="section places-section" id="places-section">
+<div class="container">
+<h2 class="section-title">Explore Places</h2>
+<p style="text-align:center;color:#657087;margin:-20px 0 35px">Discover top-rated places curated directly from your Supabase database.</p>
+
+<div class="table-card">
+  <div class="table-header-bar">
+    <div class="table-meta">
+      <span class="live-pill"><span class="live-dot"></span> Supabase Connected</span>
+      <span class="count-pill" id="places-count">Memuat data...</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="places-search" class="search-input" placeholder="🔍 Cari nama, kategori, kota..." oninput="handleSearch(this.value)">
+    </div>
+  </div>
+
+  <div class="places-wrap">
+    <table id="places">
+      <thead>
+        <tr>
+          <th>Tempat & Lokasi</th>
+          <th>Kategori</th>
+          <th>Rating</th>
+          <th>Review</th>
+          <th>Kota</th>
+          <th>Telepon</th>
+          <th style="text-align:center">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7" class="empty-cell">
+            <div class="spinner"></div>
+            <div>Menghubungkan ke Supabase & memuat data...</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer-bar">
+    <span id="places-status">Menghubungkan ke database...</span>
+    <span style="font-size:12px;color:#94a3b8">Diurutkan berdasarkan ulasan terbanyak</span>
+  </div>
+</div>
+
+</div>
+</section>
+
+<section class="cta">
+<div class="container">
+<h2>Ready to Build Your Business Idea?</h2>
+<p>Turn a big idea into a structured, gentle and consistent business-building process.</p>
+<a href="#simulation">See Chatty in Action →</a>
+</div>
+</section>
+
+<footer>Built with AI · AI Builder Bootcamp Showcase</footer>
+
+<script>
+const chats=[
+["I want to create a Business Planner for retirees. Where should I start?","Let's begin with the big picture. I'll map the purpose, target user, core framework, sections and daily journey. Then we can draft individual pages and refine the layout."],
+["I only have 3 hours today. What should I work on?","Let's keep it gentle. I'll choose one meaningful priority, break it into small steps and leave buffer time so a slower day doesn't feel like a failure."],
+["How can I share my planner-building journey on Instagram?","I'll create a weekly content theme around what you're building, why it matters, what you're learning and useful tips for your audience. We can turn these into individual posts and Canva-ready content."]
+];
+
+let chatTimer;
+function runChat(i){
+const box=document.getElementById("chat");
+const typing=document.getElementById("typing");
+clearTimeout(chatTimer);
+box.replaceChildren();
+typing.style.display="none";
+const user=document.createElement("div");
+user.className="message user";
+user.textContent=chats[i][0];
+box.appendChild(user);
+typing.style.display="block";
+chatTimer=setTimeout(()=>{
+typing.style.display="none";
+const answer=document.createElement("div");
+answer.className="message agent";
+answer.textContent=chats[i][1];
+box.appendChild(answer);
+},900);
+}
+
+const SUPABASE_URL="https://tothgtrpdvobsxrsudam.supabase.co";
+const SUPABASE_KEY="sb_publishable_rF1NQiSWXHzbsm786jZ1pQ_mTg8nRdn";
+
+let allPlaces = [];
+
+function renderRows(rows){
+  const tbody = document.querySelector("#places tbody");
+  const countEl = document.getElementById("places-count");
+  tbody.replaceChildren();
+
+  countEl.textContent = `${rows.length} dari ${allPlaces.length} tempat`;
+
+  if(!rows.length){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.className = "empty-cell";
+    td.textContent = "Tidak ada tempat yang cocok dengan pencarian.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    return;
+  }
+
+  for(const p of rows){
+    const tr = document.createElement("tr");
+
+    // 1. Nama & Street
+    const tdName = document.createElement("td");
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "place-info";
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "place-name";
+    nameSpan.textContent = p.title || "Tanpa Nama";
+    infoDiv.appendChild(nameSpan);
+
+    if(p.street){
+      const streetSpan = document.createElement("span");
+      streetSpan.className = "place-address";
+      streetSpan.textContent = p.street;
+      infoDiv.appendChild(streetSpan);
+    }
+    tdName.appendChild(infoDiv);
+    tr.appendChild(tdName);
+
+    // 2. Kategori Pill
+    const tdCat = document.createElement("td");
+    if(p.category_name){
+      const catPill = document.createElement("span");
+      catPill.className = "category-pill";
+      catPill.textContent = p.category_name;
+      tdCat.appendChild(catPill);
+    } else {
+      tdCat.textContent = "-";
+      tdCat.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdCat);
+
+    // 3. Rating Pill
+    const tdScore = document.createElement("td");
+    if(p.total_score){
+      const scorePill = document.createElement("span");
+      scorePill.className = "rating-pill";
+      scorePill.innerHTML = `<span class="star">★</span> ${Number(p.total_score).toFixed(1)}`;
+      tdScore.appendChild(scorePill);
+    } else {
+      tdScore.textContent = "-";
+      tdScore.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdScore);
+
+    // 4. Review Count
+    const tdReviews = document.createElement("td");
+    if(p.reviews_count != null){
+      const revSpan = document.createElement("span");
+      revSpan.className = "reviews-pill";
+      revSpan.textContent = `${Number(p.reviews_count).toLocaleString("id-ID")} ulasan`;
+      tdReviews.appendChild(revSpan);
+    } else {
+      tdReviews.textContent = "-";
+      tdReviews.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdReviews);
+
+    // 5. Kota
+    const tdCity = document.createElement("td");
+    if(p.city){
+      const citySpan = document.createElement("span");
+      citySpan.className = "city-text";
+      citySpan.innerHTML = `📍 ${p.city}`;
+      tdCity.appendChild(citySpan);
+    } else {
+      tdCity.textContent = "-";
+      tdCity.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdCity);
+
+    // 6. Telepon
+    const tdPhone = document.createElement("td");
+    if(p.phone){
+      const phoneLink = document.createElement("a");
+      phoneLink.className = "phone-link";
+      phoneLink.href = `tel:${p.phone.replace(/[^0-9+]/g, '')}`;
+      phoneLink.innerHTML = `📞 ${p.phone}`;
+      tdPhone.appendChild(phoneLink);
+    } else {
+      tdPhone.textContent = "-";
+      tdPhone.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdPhone);
+
+    // 7. Maps Button
+    const tdMap = document.createElement("td");
+    tdMap.style.textAlign = "center";
+    if(typeof p.url === "string" && /^https:\/\/\S+$/i.test(p.url)){
+      const a = document.createElement("a");
+      a.className = "btn-map";
+      a.href = p.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.innerHTML = "Buka Maps ↗";
+      tdMap.appendChild(a);
+    } else {
+      tdMap.textContent = "-";
+      tdMap.style.color = "#94a3b8";
+    }
+    tr.appendChild(tdMap);
+
+    tbody.appendChild(tr);
+  }
+}
+
+function handleSearch(query){
+  const q = query.trim().toLowerCase();
+  if(!q){
+    renderRows(allPlaces);
+    return;
+  }
+  const filtered = allPlaces.filter(p => {
+    return (p.title && p.title.toLowerCase().includes(q)) ||
+           (p.category_name && p.category_name.toLowerCase().includes(q)) ||
+           (p.city && p.city.toLowerCase().includes(q)) ||
+           (p.street && p.street.toLowerCase().includes(q));
+  });
+  renderRows(filtered);
+}
+
+async function loadPlaces(){
+  const tbody = document.querySelector("#places tbody");
+  const status = document.getElementById("places-status");
+  const countEl = document.getElementById("places-count");
+
+  try{
+    const res = await fetch(
+      SUPABASE_URL+"/rest/v1/places?select=*&order=reviews_count.desc.nullslast&limit=100",
+      {headers:{apikey:SUPABASE_KEY}}
+    );
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    allPlaces = await res.json();
+
+    if(!allPlaces.length){
+      tbody.replaceChildren();
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 7;
+      td.className = "empty-cell";
+      td.textContent = "Belum ada data tempat di database.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      countEl.textContent = "0 tempat";
+      status.textContent = "Terhubung ke Supabase (Data kosong).";
+      return;
+    }
+
+    renderRows(allPlaces);
+    status.textContent = `Berhasil memuat ${allPlaces.length} tempat secara realtime dari Supabase.`;
+  }catch(e){
+    console.error("Gagal memuat places:", e);
+    tbody.replaceChildren();
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.className = "empty-cell";
+    td.style.color = "#e96b6b";
+    td.textContent = "Gagal memuat data dari Supabase. Periksa console browser untuk detail error.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    countEl.textContent = "Gagal memuat";
+    status.textContent = "Koneksi gagal. Periksa konfigurasi API / RLS Supabase.";
+  }
+}
+
+loadPlaces();
+</script>
+</body>
+</html>
